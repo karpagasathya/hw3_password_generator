@@ -7,6 +7,7 @@ var specialCharacter = "~!@#$%^&*()_+=";
 
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
+var copy = document.querySelector("#copy");
 
 // Write password to the #password input
 function writePassword() {
@@ -19,6 +20,8 @@ function writePassword() {
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
+// Add event listener to copy button
+copy.addEventListener("click", copyPassword);
 
 function generatePassword() {
     
@@ -44,7 +47,7 @@ function generatePassword() {
     return finalPassword;
 }
 
-
+// password length function
 function getPasswordLength() {
    let passwordLength = prompt("length of the password");
    console.log(passwordLength);
@@ -59,3 +62,10 @@ function getPasswordLength() {
     return passwordLength;
 }
 
+// copy to clipboard function
+function copyPassword() {
+  document.getElementById("password").select();
+  document.execCommand("Copy");
+  alert("Password copied to clipboard!");
+}
+  
