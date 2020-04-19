@@ -16,3 +16,5 @@ This project page is designed with,
 - User will receive a confirm for Uppercase, Lowercase, Numbers and Special Characters.
 - Once all prompts are answered, the user will be presented with a password matching the user inputs.
 - The user should also have the option to click a button to copy the password to their clipboard for using the generated Password.
+
+You can run this Application and generate a random password [here](https://karpagasathya.github.io/hw3_password_generator/)
