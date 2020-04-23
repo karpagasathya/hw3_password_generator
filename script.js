@@ -21,7 +21,7 @@ copy.addEventListener("click", copyPassword);
 function generatePassword() {
   let finalPassword = "";
   let passwordLength = parseInt(prompt("How many characters would you like for your password? Choose between 8 and 128"));
-
+// checking given password length is a number and between 8 & 128
   if (passwordLength < 8 || passwordLength > 128 || isNaN(passwordLength)) {
     alert("You must choose a number between 8 and 128.");
   } else {
@@ -40,19 +40,48 @@ function generatePassword() {
       alert("You have to choose atleast one character type");
     }
 
-    let numberRandomLoc = Math.floor(Math.random() * passwordLength);
+    var randomNumberArray = [];
+
+    while (randomNumberArray.length < 4) {
+      let tempRandomNumber = Math.floor(Math.random() * passwordLength);
+
+      if (randomNumberArray.indexOf(tempRandomNumber) < 0) {
+        randomNumberArray.push(tempRandomNumber);
+      }
+    }
+    let uppercaseRandomLoc = randomNumberArray[0];
+    let lowercaseRandomLoc = randomNumberArray[1];
+    let numberRandomLoc = randomNumberArray[2];
+    let symbolRandomLoc = randomNumberArray[3];
 
     for (let i = 0; i < passwordLength; i++) {
-
       let passwordChar = characterSet.charAt(Math.floor(Math.random() * characterSet.length));
 
-      // performing this check to make sure at least one number is present in the password,
-      // because its less chance of getting a random number that picks the number char from small set
+      // performing this check to make sure all criteria user inputs are present in the password,
+    
+      if (i === uppercaseRandomLoc && isUpperCase) {
+        while (!upperCase.includes(passwordChar)) {
+          passwordChar = characterSet.charAt(Math.floor(Math.random() * characterSet.length));
+        }
+      }
+
+      if (i === lowercaseRandomLoc && isLowerCase) {
+        while (!lowerCase.includes(passwordChar)) {
+          passwordChar = characterSet.charAt(Math.floor(Math.random() * characterSet.length));
+        }
+      }
+
       if (i === numberRandomLoc && isNumber) {
         while (!number.includes(passwordChar)) {
           passwordChar = characterSet.charAt(Math.floor(Math.random() * characterSet.length));
         }
-      } 
+      }
+
+      if (i === symbolRandomLoc && isSpecialCharacter) {
+        while (!specialCharacter.includes(passwordChar)) {
+          passwordChar = characterSet.charAt(Math.floor(Math.random() * characterSet.length));
+        }
+      }
 
       finalPassword += passwordChar;
     }
@@ -60,6 +89,7 @@ function generatePassword() {
 
   return finalPassword;
 }
+
 
 // copy to clipboard function
 function copyPassword() {
