@@ -1,7 +1,7 @@
 var upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 var lowerCase = "abcdefghijklmnopqrstuvwxyz";
-var number = "01234567890";
-var specialCharacter = "~!@#$%^&*()_+=";
+var number = "0123456789";
+var specialCharacter = "~!@#$%^&*()_-+=|}]{[':;?/>.<,";
 
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
@@ -10,13 +10,7 @@ var passwordText = document.querySelector("#password");
 
 // Write password to the #password input
 function writePassword() {
-  var password = generatePassword();
-  
-  if (!password) {
-    password = "";
-  }
-
-  passwordText.value = password;
+  passwordText.value = generatePassword();
 }
 
 // Add event listener to generate button
@@ -25,51 +19,53 @@ generateBtn.addEventListener("click", writePassword);
 copy.addEventListener("click", copyPassword);
 
 function generatePassword() {
+  let finalPassword = "";
+  let passwordLength = parseInt(prompt("How many characters would you like for your password? Choose between 8 and 128"));
 
-  let passwordLength = parseInt(
-    prompt(
-      "how many characters would you like for your password? choose between 8 and 128"
-    )
-  );
-  console.log(passwordLength);
-  if (!passwordLength) {
-    alert("Password length should be Numeric");
-    
+  if (passwordLength < 8 || passwordLength > 128 || isNaN(passwordLength)) {
+    alert("You must choose a number between 8 and 128.");
   } else {
-    if (passwordLength < 8 || passwordLength > 128) {
-      alert("You must choose between 8 and 128");
+    let isUpperCase = confirm("Do you want to include uppercase letters?");
+    let isLowerCase = confirm("Do you want to include lowercase letters?");
+    let isNumber = confirm("Do you want to include numbers?");
+    let isSpecialCharacter = confirm("Do you want to include special characters?");
+
+    let characterSet = "";
+    if (isUpperCase || isLowerCase || isNumber || isSpecialCharacter) {
+      if (isUpperCase) characterSet += upperCase;
+      if (isLowerCase) characterSet += lowerCase;
+      if (isNumber) characterSet += number;
+      if (isSpecialCharacter) characterSet += specialCharacter;
     } else {
-      let isUpperCase = confirm("Do you want Uppercase letters");
-      let isLowerCase = confirm("Do you want Lowercase letters");
-      let isNumber = confirm("Do you want Numbers");
-      let isSpecialCharacter = confirm("Do you want Special Characters");
+      alert("You have to choose atleast one character type");
+    }
 
-      let characterSet = "";
-      if (isUpperCase || isLowerCase || isNumber || isSpecialCharacter) {
-        if (isUpperCase) characterSet += upperCase;
-        if (isLowerCase) characterSet += lowerCase;
-        if (isNumber) characterSet += number;
-        if (isSpecialCharacter) characterSet += specialCharacter;
-      } else {
-        alert("You have to choose atleast one character type");
-      }
+    let numberRandomLoc = Math.floor(Math.random() * passwordLength);
 
-      let finalPassword = "";
-      for (var i = 0; i < passwordLength; i++) {
-        finalPassword += characterSet.charAt(
-          Math.floor(Math.random() * characterSet.length)
-        );
-      }
+    for (let i = 0; i < passwordLength; i++) {
 
-      return finalPassword;
+      let passwordChar = characterSet.charAt(Math.floor(Math.random() * characterSet.length));
+
+      // performing this check to make sure at least one number is present in the password,
+      // because its less chance of getting a random number that picks the number char from small set
+      if (i === numberRandomLoc && isNumber) {
+        while (!number.includes(passwordChar)) {
+          passwordChar = characterSet.charAt(Math.floor(Math.random() * characterSet.length));
+        }
+      } 
+
+      finalPassword += passwordChar;
     }
   }
 
+  return finalPassword;
 }
 
 // copy to clipboard function
 function copyPassword() {
-  document.getElementById("password").select();
-  document.execCommand("Copy");
-  alert("Password copied to clipboard!");
+  if (passwordText.value !== "") {
+    passwordText.select();
+    document.execCommand("Copy");
+    alert("Password copied to clipboard!");
+  }
 }
